@@ -1,0 +1,1 @@
+This project is a hangman game. It is a multiplayer version, in which friends can use one game to play against each other. This program was coded by Niyati Trivedi.
