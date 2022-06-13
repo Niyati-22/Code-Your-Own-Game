@@ -39,6 +39,7 @@ public class Game {
   private int guesses;
   private ArrayList<String> wrong_letters;
   HashMap<String, Integer> players;
+  HashMap<String, Integer> allPlayers;
   private String currentPlayer = "";
   Scanner scan = new Scanner(System.in);
   private String[] guessString;
@@ -72,6 +73,12 @@ public class Game {
     words.add("crisp");
     words.add("drift");
     
+    LeaderBoardState state = LeaderBoardState.restore();
+    if (state == null)
+      allPlayers = new HashMap<String, Integer>();
+    else
+      allPlayers = state.scores;
+      
     players = new HashMap<String, Integer>();
     wrong_letters = new ArrayList<String>();
   }
@@ -136,10 +143,11 @@ public class Game {
   }
   
   public void play(){
+    int time = 0;
     int choice = 0;
-    while (choice <= 0|| choice >= 6){
-      System.out.println("Choose an option from the menu: \n\t1-add a player\n\t2-choose a player to play\n\t3-view player points\n\t4-add a word\n\t5-play a game");
-      System.out.println("Please type a number between 1-5.");
+    while (choice <= 0|| choice > 6){
+      System.out.println("Choose an option from the menu: \n\t1-add a player\n\t2-choose a player to play\n\t3-view player points\n\t4-add a word\n\t5-play a game\n\t6-quit");
+      System.out.println("Please type a number between 1-6.");
       try{
         String choiceString = scan.nextLine();
         choice = Integer.parseInt(choiceString);
@@ -151,9 +159,13 @@ public class Game {
     switch (choice){
       case 1:
         addPlayer();
+        time++;
+        play();
         break;
       case 2:
         choosePlayer();
+        time++;
+        play();
         break;
       case 3:
         System.out.println("Here are all current players: ");
@@ -163,12 +175,16 @@ public class Game {
         System.out.println("Which player's points do you want to see?");
         String s = scan.nextLine();
         returnPoints(s);
+        time++;
+        play();
         break;
       case 4:
         System.out.println("Please make sure your word has no repeating letters.");
         System.out.println("What word do you want to add?");
         String w = scan.nextLine();
         addWord(w);
+        time++;
+        play();
         break;
       case 5:
         String y;
@@ -236,8 +252,20 @@ public class Game {
           wrong_letters.remove(c);
           c--;
         }
+        time++;
+        play();
+        break;
+      case 6:
+        for (String thing : players.keySet()){
+          allPlayers.put(thing, players.get(thing));
+        }
+        System.out.println("Thanks for playing!");
+        LeaderBoardState st = new LeaderBoardState();
+        st.scores = allPlayers;
+        st.save();
+        System.out.println("Global Leaderboard: ");
+        System.out.println(allPlayers);
         break;
     }
-    play();
   }
 }

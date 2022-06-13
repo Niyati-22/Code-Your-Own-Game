@@ -10,6 +10,7 @@ class Main {
     System.out.println();
     System.out.println("Welcome to Hangman! This is a multiplayer hangman game, in which you can compete in Hangman against your friends. To start, add all players. Once you've added all of the players, choose a player to start with. Then, begin!");
     System.out.println();
+
     g.play();
   }
 
